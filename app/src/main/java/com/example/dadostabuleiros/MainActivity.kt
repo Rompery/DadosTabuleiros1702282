@@ -35,6 +35,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -89,8 +90,8 @@ fun MainScreen(navController: NavHostController) {
 @Composable
 fun GameScreen(navController: NavHostController) {
     var diceValue by remember { mutableIntStateOf(1) }
-    var playerPosition by remember { mutableIntStateOf(0) }
-    val secondPlayerPosition by remember { mutableIntStateOf(63) }
+    var playerPosition by remember { mutableIntStateOf(1) }
+    var secondPlayerPosition by remember { mutableIntStateOf(62) } // Adicionado
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -113,6 +114,7 @@ fun GameScreen(navController: NavHostController) {
             Button(onClick = {
                 diceValue = Random.nextInt(1, 7)
                 playerPosition = (playerPosition + diceValue) % 64
+                secondPlayerPosition = (secondPlayerPosition - diceValue + 64) % 64 // Adicionado
             }) {
                 Text(text = "Lançar Dados")
             }
@@ -123,6 +125,7 @@ fun GameScreen(navController: NavHostController) {
         }
     }
 }
+
 @Composable
 fun Board(playerPosition: Int, secondPlayerPosition: Int) {
     LazyVerticalGrid(
@@ -158,6 +161,14 @@ fun Board(playerPosition: Int, secondPlayerPosition: Int) {
                                 .fillMaxSize(),
                             contentScale = ContentScale.Crop
                         )
+                    }
+                    0 -> {
+                        Text(text = "Início", color = Color.Green,
+                            fontSize = 11.sp)
+                    }
+                    63 -> {
+                        Text(text = "Fim", color = Color.Red,
+                            )
                     }
                     else -> {
                         Box(

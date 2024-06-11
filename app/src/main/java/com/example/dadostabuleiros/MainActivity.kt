@@ -91,8 +91,8 @@ fun MainScreen(navController: NavHostController) {
 @Composable
 fun GameScreen(navController: NavHostController) {
     var diceValue by remember { mutableIntStateOf(1) }
-    var playerPosition by remember { mutableIntStateOf(0) }
-    var secondPlayerPosition by remember { mutableIntStateOf(0) }
+    var playerPosition by remember { mutableIntStateOf(1) }
+    var secondPlayerPosition by remember { mutableIntStateOf(1) }
     var currentPlayer by remember { mutableStateOf(1) }
     var gameOver by remember { mutableStateOf(false) }
 
@@ -118,15 +118,15 @@ fun GameScreen(navController: NavHostController) {
                 Button(onClick = {
                     diceValue = Random.nextInt(1, 7)
                     if (currentPlayer == 1) {
-                        playerPosition = (playerPosition + diceValue) % 64
-                        if (playerPosition == 63) {
+                        playerPosition = (playerPosition + diceValue) % 79
+                        if (playerPosition == 79) {
                             gameOver = true
                         } else {
                             currentPlayer = 2
                         }
                     } else {
-                        secondPlayerPosition = (secondPlayerPosition + diceValue + 64) % 64
-                        if (secondPlayerPosition == 63) {
+                        secondPlayerPosition = (secondPlayerPosition + diceValue + 79) % 79
+                        if (secondPlayerPosition == 79) {
                             gameOver = true
                         } else {
                             currentPlayer = 1
@@ -136,7 +136,7 @@ fun GameScreen(navController: NavHostController) {
                     Text(text = "Lançar Dados")
                 }
             } else {
-                Text(text = "Fim de Jogo! Jogador ${if (playerPosition == 63) 1 else 2} venceu!")
+                Text(text = "Fim de Jogo! Jogador ${if (playerPosition == 79) 1 else 2} venceu!")
                 Button(onClick = { navController.popBackStack() }) {
                     Text(text = "Voltar")
                 }
@@ -155,12 +155,14 @@ fun Board(playerPosition: Int, secondPlayerPosition: Int) {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        items(64) { index ->
+        items(80) { index ->
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .aspectRatio(1f)
                     .padding(4.dp)
+                    .background(Color.White),
+
             ) {
                 when (index) {
                     playerPosition -> {
@@ -187,8 +189,8 @@ fun Board(playerPosition: Int, secondPlayerPosition: Int) {
                         Text(text = "Início", color = Color.Green,
                             fontSize = 11.sp)
                     }
-                    63 -> {
-                        Text(text = "Fim", color = Color.Red,
+                    79 -> {
+                        Text(text = "Fim", color = Color.Red
                             )
                     }
                     else -> {

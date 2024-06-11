@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -90,8 +91,10 @@ fun MainScreen(navController: NavHostController) {
 @Composable
 fun GameScreen(navController: NavHostController) {
     var diceValue by remember { mutableIntStateOf(1) }
-    var playerPosition by remember { mutableIntStateOf(1) }
-    var secondPlayerPosition by remember { mutableIntStateOf(62) } // Adicionado
+    var playerPosition by remember { mutableIntStateOf(0) }
+    var secondPlayerPosition by remember { mutableIntStateOf(0) }
+    var currentPlayer by remember { mutableStateOf(1) }
+    var gameOver by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -111,20 +114,38 @@ fun GameScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
             Dice(diceValue)
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = {
-                diceValue = Random.nextInt(1, 7)
-                playerPosition = (playerPosition + diceValue) % 64
-                secondPlayerPosition = (secondPlayerPosition - diceValue + 64) % 64 // Adicionado
-            }) {
-                Text(text = "Lançar Dados")
+            if (!gameOver) {
+                Button(onClick = {
+                    diceValue = Random.nextInt(1, 7)
+                    if (currentPlayer == 1) {
+                        playerPosition = (playerPosition + diceValue) % 64
+                        if (playerPosition == 63) {
+                            gameOver = true
+                        } else {
+                            currentPlayer = 2
+                        }
+                    } else {
+                        secondPlayerPosition = (secondPlayerPosition + diceValue + 64) % 64
+                        if (secondPlayerPosition == 63) {
+                            gameOver = true
+                        } else {
+                            currentPlayer = 1
+                        }
+                    }
+                }) {
+                    Text(text = "Lançar Dados")
+                }
+            } else {
+                Text(text = "Fim de Jogo! Jogador ${if (playerPosition == 63) 1 else 2} venceu!")
+                Button(onClick = { navController.popBackStack() }) {
+                    Text(text = "Voltar")
+                }
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { navController.popBackStack() }) {
-                Text(text = "Voltar")
-            }
         }
     }
 }
+
 
 @Composable
 fun Board(playerPosition: Int, secondPlayerPosition: Int) {

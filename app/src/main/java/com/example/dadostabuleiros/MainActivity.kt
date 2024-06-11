@@ -61,41 +61,66 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(navController: NavHostController) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Button(onClick = { navController.navigate("game_screen") }) {
-            Text(text = "Iniciar Jogo")
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+       ) {
+        Image(
+            painter = painterResource(id = R.drawable.d_dice_outdoors),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Button(onClick = { navController.navigate("game_screen") }) {
+                Text(text = "Iniciar Jogo")
+            }
         }
+
     }
+
 }
 @Composable
 fun GameScreen(navController: NavHostController) { // Adicionado navController
     var diceValue by remember { mutableIntStateOf(1) }
     var playerPosition by remember { mutableIntStateOf(0) }
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        Board(playerPosition)
-        Spacer(modifier = Modifier.height(16.dp))
-        Dice(diceValue)
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            diceValue = Random.nextInt(1, 7)
-            playerPosition = (playerPosition + diceValue) % 64
-        }) {
-            Text(text = "Lançar Dados")
-        }
-        Spacer(modifier = Modifier.height(16.dp)) // Adicionado
-        Button(onClick = { navController.popBackStack() }) { // Adicionado
-            Text(text = "Voltar")
+        Image(
+            painter = painterResource(id = R.drawable.view_3d_dice_with_abstract_scenery),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+        // Conteúdo da tela do jogo...
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Board(playerPosition)
+            Spacer(modifier = Modifier.height(16.dp))
+            Dice(diceValue)
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = {
+                diceValue = Random.nextInt(1, 7)
+                playerPosition = (playerPosition + diceValue) % 64
+            }) {
+                Text(text = "Lançar Dados")
+            }
+            Spacer(modifier = Modifier.height(16.dp)) // Adicionado
+            Button(onClick = { navController.popBackStack() }) { // Adicionado
+                Text(text = "Voltar")
+            }
         }
     }
+
 }
 @Composable
 fun Board(playerPosition: Int) {
@@ -124,7 +149,7 @@ fun Board(playerPosition: Int) {
                 } else {
                     Box(
                         modifier = Modifier
-                            .background(Color.Gray)
+                            .background(Color.Yellow)
                             .fillMaxSize()
                     )
                 }

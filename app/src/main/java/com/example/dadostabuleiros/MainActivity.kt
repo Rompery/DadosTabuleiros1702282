@@ -80,6 +80,13 @@ fun MainScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
+            Text(
+                text = "BEM VINDOS AO DADOS&TABULEIROS",
+                color = Color.Red,
+                fontSize = 35.sp,
+                modifier = Modifier.padding(20.dp)
+            )
+            Spacer(modifier = Modifier.height(40.dp))
             Button(onClick = { navController.navigate("game_screen") }) {
                 Text(text = "Iniciar Jogo")
             }
@@ -94,6 +101,7 @@ fun GameScreen(navController: NavHostController) {
     var secondPlayerPosition by remember { mutableIntStateOf(1) }
     var currentPlayer by remember { mutableStateOf(1) }
     var gameOver by remember { mutableStateOf(false) }
+
 
     Box(
         modifier = Modifier.fillMaxSize()

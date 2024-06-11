@@ -68,7 +68,7 @@ fun MainScreen(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-       ) {
+    ) {
         Image(
             painter = painterResource(id = R.drawable.d_dice_outdoors),
             contentDescription = null,
@@ -83,12 +83,10 @@ fun MainScreen(navController: NavHostController) {
             Button(onClick = { navController.navigate("game_screen") }) {
                 Text(text = "Iniciar Jogo")
             }
-
         }
-
     }
-
 }
+
 @Composable
 fun GameScreen(navController: NavHostController) {
     var diceValue by remember { mutableIntStateOf(1) }
@@ -119,8 +117,8 @@ fun GameScreen(navController: NavHostController) {
                 Button(onClick = {
                     diceValue = Random.nextInt(1, 7)
                     if (currentPlayer == 1) {
-                        val newPosition = (playerPosition + diceValue) % 80
-                        if (newPosition != secondPlayerPosition) {
+                        val newPosition = playerPosition + diceValue
+                        if (newPosition <= 79 && newPosition != secondPlayerPosition) {
                             playerPosition = newPosition
                             if (playerPosition == 79) {
                                 gameOver = true
@@ -129,8 +127,8 @@ fun GameScreen(navController: NavHostController) {
                             }
                         }
                     } else {
-                        val newPosition = (secondPlayerPosition + diceValue) % 80
-                        if (newPosition != playerPosition) {
+                        val newPosition = secondPlayerPosition + diceValue
+                        if (newPosition <= 79 && newPosition != playerPosition) {
                             secondPlayerPosition = newPosition
                             if (secondPlayerPosition == 79) {
                                 gameOver = true
@@ -144,6 +142,15 @@ fun GameScreen(navController: NavHostController) {
                 }
             } else {
                 Text(text = "Fim de Jogo! Jogador ${if (playerPosition == 79) 1 else 2} venceu!")
+                Button(onClick = {
+                    // Reiniciar o jogo
+                    playerPosition = 1
+                    secondPlayerPosition = 1
+                    currentPlayer = 1
+                    gameOver = false
+                }) {
+                    Text(text = "Reiniciar")
+                }
                 Button(onClick = { navController.popBackStack() }) {
                     Text(text = "Voltar")
                 }
@@ -168,8 +175,7 @@ fun Board(playerPosition: Int, secondPlayerPosition: Int) {
                     .aspectRatio(1f)
                     .padding(4.dp)
                     .background(Color.White),
-
-                ) {
+            ) {
                 when (index) {
                     playerPosition -> {
                         Image(
@@ -196,8 +202,7 @@ fun Board(playerPosition: Int, secondPlayerPosition: Int) {
                             fontSize = 11.sp)
                     }
                     79 -> {
-                        Text(text = "Fim", color = Color.Red
-                        )
+                        Text(text = "Fim", color = Color.Red)
                     }
                     else -> {
                         Box(
@@ -211,7 +216,6 @@ fun Board(playerPosition: Int, secondPlayerPosition: Int) {
         }
     }
 }
-
 
 @Composable
 fun Dice(value: Int) {
@@ -230,7 +234,6 @@ fun Dice(value: Int) {
         modifier = Modifier.size(100.dp)
     )
 }
-
 
 @Preview(showBackground = true)
 @Composable

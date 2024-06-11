@@ -132,8 +132,9 @@ fun Dice(value: Int) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun DadosTabuleirosPreview() {
     DadosTabuleirosTheme {
         GameScreen()
+
     }
 }

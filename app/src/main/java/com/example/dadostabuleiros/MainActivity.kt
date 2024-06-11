@@ -83,6 +83,7 @@ fun MainScreen(navController: NavHostController) {
             Button(onClick = { navController.navigate("game_screen") }) {
                 Text(text = "Iniciar Jogo")
             }
+
         }
 
     }
@@ -118,18 +119,24 @@ fun GameScreen(navController: NavHostController) {
                 Button(onClick = {
                     diceValue = Random.nextInt(1, 7)
                     if (currentPlayer == 1) {
-                        playerPosition = (playerPosition + diceValue) % 79
-                        if (playerPosition == 79) {
-                            gameOver = true
-                        } else {
-                            currentPlayer = 2
+                        val newPosition = (playerPosition + diceValue) % 80
+                        if (newPosition != secondPlayerPosition) {
+                            playerPosition = newPosition
+                            if (playerPosition == 79) {
+                                gameOver = true
+                            } else {
+                                currentPlayer = 2
+                            }
                         }
                     } else {
-                        secondPlayerPosition = (secondPlayerPosition + diceValue + 79) % 79
-                        if (secondPlayerPosition == 79) {
-                            gameOver = true
-                        } else {
-                            currentPlayer = 1
+                        val newPosition = (secondPlayerPosition + diceValue) % 80
+                        if (newPosition != playerPosition) {
+                            secondPlayerPosition = newPosition
+                            if (secondPlayerPosition == 79) {
+                                gameOver = true
+                            } else {
+                                currentPlayer = 1
+                            }
                         }
                     }
                 }) {
@@ -145,7 +152,6 @@ fun GameScreen(navController: NavHostController) {
         }
     }
 }
-
 
 @Composable
 fun Board(playerPosition: Int, secondPlayerPosition: Int) {
@@ -163,7 +169,7 @@ fun Board(playerPosition: Int, secondPlayerPosition: Int) {
                     .padding(4.dp)
                     .background(Color.White),
 
-            ) {
+                ) {
                 when (index) {
                     playerPosition -> {
                         Image(
@@ -191,7 +197,7 @@ fun Board(playerPosition: Int, secondPlayerPosition: Int) {
                     }
                     79 -> {
                         Text(text = "Fim", color = Color.Red
-                            )
+                        )
                     }
                     else -> {
                         Box(
@@ -205,6 +211,7 @@ fun Board(playerPosition: Int, secondPlayerPosition: Int) {
         }
     }
 }
+
 
 @Composable
 fun Dice(value: Int) {

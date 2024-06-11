@@ -3,7 +3,6 @@ package com.example.dadostabuleiros
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,17 +35,24 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.dadostabuleiros.ui.theme.DadosTabuleirosTheme
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             DadosTabuleirosTheme {
+                val navController = rememberNavController()
                 Surface(color = MaterialTheme.colorScheme.background) {
-                    GameScreen()
+                    NavHost(navController, startDestination = "main_screen") {
+                        composable("main_screen") { MainScreen(navController) }
+                        composable("game_screen") { GameScreen(navController) }
+                    }
                 }
             }
         }
@@ -54,7 +60,19 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun GameScreen() {
+fun MainScreen(navController: NavHostController) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Button(onClick = { navController.navigate("game_screen") }) {
+            Text(text = "Iniciar Jogo")
+        }
+    }
+}
+@Composable
+fun GameScreen(navController: NavHostController) { // Adicionado navController
     var diceValue by remember { mutableIntStateOf(1) }
     var playerPosition by remember { mutableIntStateOf(0) }
 
@@ -72,6 +90,10 @@ fun GameScreen() {
             playerPosition = (playerPosition + diceValue) % 64
         }) {
             Text(text = "Lançar Dados")
+        }
+        Spacer(modifier = Modifier.height(16.dp)) // Adicionado
+        Button(onClick = { navController.popBackStack() }) { // Adicionado
+            Text(text = "Voltar")
         }
     }
 }
@@ -132,9 +154,16 @@ fun Dice(value: Int) {
 
 @Preview(showBackground = true)
 @Composable
-fun DadosTabuleirosPreview() {
+fun MainScreenPreview() {
     DadosTabuleirosTheme {
-        GameScreen()
+        MainScreen(rememberNavController()) // Adicionado
+    }
+}
 
+@Preview(showBackground = true)
+@Composable
+fun GameScreenPreview() {
+    DadosTabuleirosTheme {
+        GameScreen(rememberNavController()) // Adicionado
     }
 }

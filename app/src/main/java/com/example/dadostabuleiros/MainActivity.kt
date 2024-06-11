@@ -99,7 +99,7 @@ fun GameScreen(navController: NavHostController) {
     var diceValue by remember { mutableIntStateOf(1) }
     var playerPosition by remember { mutableIntStateOf(1) }
     var secondPlayerPosition by remember { mutableIntStateOf(1) }
-    var currentPlayer by remember { mutableStateOf(1) }
+    var currentPlayer by remember { mutableIntStateOf(1) }
     var gameOver by remember { mutableStateOf(false) }
 
 

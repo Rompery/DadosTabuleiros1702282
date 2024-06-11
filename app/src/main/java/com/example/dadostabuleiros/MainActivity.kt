@@ -39,6 +39,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.dadostabuleiros.R.drawable.driver
+import com.example.dadostabuleiros.R.drawable.player
 import com.example.dadostabuleiros.ui.theme.DadosTabuleirosTheme
 import kotlin.random.Random
 
@@ -85,9 +87,10 @@ fun MainScreen(navController: NavHostController) {
 
 }
 @Composable
-fun GameScreen(navController: NavHostController) { // Adicionado navController
+fun GameScreen(navController: NavHostController) {
     var diceValue by remember { mutableIntStateOf(1) }
     var playerPosition by remember { mutableIntStateOf(0) }
+    val secondPlayerPosition by remember { mutableIntStateOf(63) }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -98,13 +101,12 @@ fun GameScreen(navController: NavHostController) { // Adicionado navController
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-        // Conteúdo da tela do jogo...
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            Board(playerPosition)
+            Board(playerPosition, secondPlayerPosition)
             Spacer(modifier = Modifier.height(16.dp))
             Dice(diceValue)
             Spacer(modifier = Modifier.height(16.dp))
@@ -114,16 +116,15 @@ fun GameScreen(navController: NavHostController) { // Adicionado navController
             }) {
                 Text(text = "Lançar Dados")
             }
-            Spacer(modifier = Modifier.height(16.dp)) // Adicionado
-            Button(onClick = { navController.popBackStack() }) { // Adicionado
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = { navController.popBackStack() }) {
                 Text(text = "Voltar")
             }
         }
     }
-
 }
 @Composable
-fun Board(playerPosition: Int) {
+fun Board(playerPosition: Int, secondPlayerPosition: Int) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(8),
         modifier = Modifier
@@ -137,21 +138,34 @@ fun Board(playerPosition: Int) {
                     .aspectRatio(1f)
                     .padding(4.dp)
             ) {
-                if (index == playerPosition) {
-                    Image(
-                        painter = painterResource(id = R.drawable.player),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .background(Color.Yellow)
-                            .fillMaxSize()
-                    )
+                when (index) {
+                    playerPosition -> {
+                        Image(
+                            painter = painterResource(id = player),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                    secondPlayerPosition -> {
+                        Image(
+                            painter = painterResource(id = driver),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                    else -> {
+                        Box(
+                            modifier = Modifier
+                                .background(Color.Gray)
+                                .fillMaxSize()
+                        )
+                    }
                 }
             }
         }

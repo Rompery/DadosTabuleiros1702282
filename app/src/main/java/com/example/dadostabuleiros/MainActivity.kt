@@ -1,5 +1,6 @@
 package com.example.dadostabuleiros
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,7 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,6 +69,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(navController: NavHostController) {
+    val activity = (LocalContext.current as? Activity)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -82,17 +88,27 @@ fun MainScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "BEM VINDOS AO DADOS&TABULEIROS",
+                textAlign = TextAlign.Center,
                 color = Color.Red,
-                fontSize = 35.sp,
-                modifier = Modifier.padding(20.dp)
+                fontSize = 30.sp,
+                fontFamily = FontFamily.Default, // Adicionado tipo de letra
+                modifier = Modifier.padding(vertical = 20.dp).background(Color.White) // Adicionado espaçamento vertical
             )
             Spacer(modifier = Modifier.height(40.dp))
             Button(onClick = { navController.navigate("game_screen") }) {
                 Text(text = "Iniciar Jogo")
             }
+            Spacer(modifier = Modifier.height(16.dp)) // Espaçamento entre os botões
+            Button(onClick = {
+                activity?.finish() // Finaliza a atividade para sair do jogo
+            }) {
+                Text(text = "Sair do Jogo")
+            }
         }
     }
 }
+
+
 
 @Composable
 fun GameScreen(navController: NavHostController) {
@@ -121,6 +137,13 @@ fun GameScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
             Dice(diceValue)
             Spacer(modifier = Modifier.height(16.dp))
+            // Alerta de vez do jogador
+            Text(
+                text = "Vez do Jogador $currentPlayer",
+                color = Color.White,
+                fontSize = 24.sp,
+                modifier = Modifier.padding(16.dp)
+            )
             if (!gameOver) {
                 Button(onClick = {
                     diceValue = Random.nextInt(1, 7)
@@ -207,7 +230,7 @@ fun Board(playerPosition: Int, secondPlayerPosition: Int) {
                     }
                     0 -> {
                         Text(text = "Início", color = Color.Green,
-                            fontSize = 11.sp)
+                            fontSize = 11.5.sp)
                     }
                     79 -> {
                         Text(text = "Fim", color = Color.Red)
@@ -215,8 +238,9 @@ fun Board(playerPosition: Int, secondPlayerPosition: Int) {
                     else -> {
                         Box(
                             modifier = Modifier
-                                .background(Color.Gray)
+                                .background(Color.LightGray)
                                 .fillMaxSize()
+
                         )
                     }
                 }

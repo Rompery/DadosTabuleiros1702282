@@ -92,7 +92,8 @@ fun MainScreen(navController: NavHostController) {
                 color = Color.Red,
                 fontSize = 30.sp,
                 fontFamily = FontFamily.Default, // Adicionado tipo de letra
-                modifier = Modifier.padding(vertical = 20.dp).background(Color.White) // Adicionado espaçamento vertical
+                modifier = Modifier.padding(vertical = 20.dp)
+                    .background(Color.White) // Adicionado espaçamento vertical
             )
             Spacer(modifier = Modifier.height(40.dp))
             Button(onClick = { navController.navigate("game_screen") }) {
@@ -118,7 +119,6 @@ fun GameScreen(navController: NavHostController) {
     var currentPlayer by remember { mutableIntStateOf(1) }
     var gameOver by remember { mutableStateOf(false) }
 
-
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -141,8 +141,8 @@ fun GameScreen(navController: NavHostController) {
             Text(
                 text = "Vez do Jogador $currentPlayer",
                 color = Color.White,
-                fontSize = 24.sp,
-                modifier = Modifier.padding(16.dp)
+                fontSize = 15.sp,
+                modifier = Modifier.padding(10.dp)
             )
             if (!gameOver) {
                 Button(onClick = {
@@ -186,7 +186,7 @@ fun GameScreen(navController: NavHostController) {
                     Text(text = "Voltar")
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }
@@ -271,7 +271,7 @@ fun Dice(value: Int) {
 @Composable
 fun MainScreenPreview() {
     DadosTabuleirosTheme {
-        MainScreen(rememberNavController()) // Adicionado
+        MainScreen(rememberNavController())
     }
 }
 

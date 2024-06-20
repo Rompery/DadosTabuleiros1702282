@@ -92,7 +92,8 @@ fun MainScreen(navController: NavHostController) {
                 color = Color.Red,
                 fontSize = 30.sp,
                 fontFamily = FontFamily.Default, // Adicionado tipo de letra
-                modifier = Modifier.padding(vertical = 20.dp)
+                modifier = Modifier
+                    .padding(vertical = 20.dp)
                     .background(Color.White) // Adicionado espaçamento vertical
             )
             Spacer(modifier = Modifier.height(40.dp))
@@ -114,6 +115,7 @@ fun MainScreen(navController: NavHostController) {
 @Composable
 fun GameScreen(navController: NavHostController) {
     var diceValue by remember { mutableIntStateOf(1) }
+    var diceValue2 by remember { mutableIntStateOf(1)    }
     var playerPosition by remember { mutableIntStateOf(1) }
     var secondPlayerPosition by remember { mutableIntStateOf(1) }
     var currentPlayer by remember { mutableIntStateOf(1) }
@@ -158,6 +160,7 @@ fun GameScreen(navController: NavHostController) {
                             }
                         }
                     } else {
+                        diceValue2 = Random.nextInt(1, 7)
                         val newPosition = secondPlayerPosition + diceValue
                         if (newPosition <= 79 && newPosition != playerPosition) {
                             secondPlayerPosition = newPosition

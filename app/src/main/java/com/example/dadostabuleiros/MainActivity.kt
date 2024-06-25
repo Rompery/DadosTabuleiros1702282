@@ -73,8 +73,7 @@ fun MainScreen(navController: NavHostController) {
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
-    ) {
+            .fillMaxSize()    ) {
         Image(
             painter = painterResource(id = R.drawable.d_dice_outdoors),
             contentDescription = null,
